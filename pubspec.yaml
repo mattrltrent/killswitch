@@ -1,7 +1,9 @@
 name: killswitch
-description: "A new Flutter package project."
+description: Remotely kill your application.
 version: 0.0.1
-homepage:
+homepage: https://matthewtrent.me/
+repository: https://github.com/mattrltrent/killswitch
+issue_tracker: https://github.com/mattrltrent/killswitch/issues
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
