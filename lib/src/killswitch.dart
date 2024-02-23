@@ -17,14 +17,17 @@ class Killswitch extends StatefulWidget {
   /// called when the app is whitelisted
   final VoidCallback? onWhitelist;
 
-  /// the status code that will kill the app when returned from [killAndWhitelistSourceUrl]
+  /// the status code that will kill the app when returned from [killWhitelistAndIgnoreSourceUrl]
   final int killStatusCode;
 
-  /// the status code that will permanently whitelist the app when returned from [killAndWhitelistSourceUrl]
+  /// the status code that if returned, fully ignores the killswitch; useful for testing
+  final int doNothingStatusCode;
+
+  /// the status code that will permanently whitelist the app when returned from [killWhitelistAndIgnoreSourceUrl]
   final int whitelistStatusCode;
 
   /// the URL that will be polled to check if the app should be killed or whitelisted
-  final String killAndWhitelistSourceUrl;
+  final String killWhitelistAndIgnoreSourceUrl;
 
   /// child of widget
   final Widget child;
@@ -37,12 +40,12 @@ class Killswitch extends StatefulWidget {
   /// only change if you think its default value will have a conflict with yours
   final String uniqueKillswitchWhitelistPrefsKey;
 
-  /// prefs key to store info about how many times the app has attempted to connect to [killAndWhitelistSourceUrl] but failed.
+  /// prefs key to store info about how many times the app has attempted to connect to [killWhitelistAndIgnoreSourceUrl] but failed.
   ///
   /// only change if you think its default value will have a conflict with yours
   final String uniqueKillswitchWhitelistFailureConnectPrefsKey;
 
-  /// number of times the app will tolerate a failed connection to [killAndWhitelistSourceUrl] before whitelisting app permenently
+  /// number of times the app will tolerate a failed connection to [killWhitelistAndIgnoreSourceUrl] before whitelisting app permenently
   final int failuresToConnectToSourceBeforeWhitelist;
 
   /// whether errors should be suppressed
@@ -59,11 +62,14 @@ class Killswitch extends StatefulWidget {
     this.uniqueKillswitchWhitelistFailureConnectPrefsKey = whitelistFailedSourceConnectPrefKey,
     this.failuresToConnectToSourceBeforeWhitelist = 10,
     this.killStatusCode = 403,
-    this.whitelistStatusCode = 200,
+    this.whitelistStatusCode = 202,
+    this.doNothingStatusCode = 200,
     this.preventPushToKilledPage = false,
-    required this.killAndWhitelistSourceUrl,
+    required this.killWhitelistAndIgnoreSourceUrl,
     required this.child,
-  }) : assert(killStatusCode != whitelistStatusCode);
+  }) : assert(killStatusCode != whitelistStatusCode &&
+            killStatusCode != doNothingStatusCode &&
+            whitelistStatusCode != doNothingStatusCode);
 
   @override
   State<Killswitch> createState() => _KillswitchState();
@@ -115,11 +121,13 @@ class _KillswitchState extends State<Killswitch> {
 
   /// poll the source [widget.killAndWhitelistSourceUrl] to check if the app should be killed or whitelisted
   void _pollSource() {
-    http.get(Uri.parse(widget.killAndWhitelistSourceUrl)).then((r) {
+    http.get(Uri.parse(widget.killWhitelistAndIgnoreSourceUrl)).then((r) {
       if (r.statusCode == widget.killStatusCode) {
         _kill();
       } else if (r.statusCode == widget.whitelistStatusCode) {
         _whitelist();
+      } else if (r.statusCode == widget.doNothingStatusCode) {
+        // do nothing! we're just testing
       } else {
         _incrementSourceConnectFailures();
       }
@@ -130,7 +138,7 @@ class _KillswitchState extends State<Killswitch> {
   }
 
   /// asynronously execute the kill/whitelist check and commands
-  Future<void> execute() async {
+  Future<void> _execute() async {
     if (await _isWhitelisted()) return;
     _pollSource();
   }
@@ -139,7 +147,7 @@ class _KillswitchState extends State<Killswitch> {
   @override
   void initState() {
     super.initState();
-    execute();
+    _execute();
   }
 
   /// build method
