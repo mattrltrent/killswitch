@@ -1,6 +1,6 @@
 name: killswitch
-description: Remotely kill your application.
-version: 0.0.1
+description: Killswitch that listens to a URL and will kill the app if the URL returns a bad status code. You can also whitelist an app via a different status code.
+version: 1.0.0
 homepage: https://matthewtrent.me/
 repository: https://github.com/mattrltrent/killswitch
 issue_tracker: https://github.com/mattrltrent/killswitch/issues

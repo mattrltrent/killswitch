@@ -4,7 +4,8 @@ class KilledPage extends StatelessWidget {
   final String killedAppText;
   final VoidCallback? onTextClicked;
 
-  const KilledPage({super.key, required this.killedAppText, this.onTextClicked});
+  const KilledPage(
+      {super.key, required this.killedAppText, this.onTextClicked});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class KilledPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   InkWell(
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    onTap: onTextClicked == null ? null : () => onTextClicked!(),
+                    onTap:
+                        onTextClicked == null ? null : () => onTextClicked!(),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Text(
