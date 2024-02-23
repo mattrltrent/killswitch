@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:killswitch/exports.dart';
+import 'package:killswitch/killswitch.dart';
 
 void main() => runApp(const MyApp());
 
