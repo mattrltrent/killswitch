@@ -56,10 +56,12 @@ class Killswitch extends StatefulWidget {
     this.onKill,
     this.onWhitelist,
     this.killedAppTextClicked,
-    this.killedAppText = "Something went wrong. Contact the developer for help.",
+    this.killedAppText =
+        "Something went wrong. Contact the developer for help.",
     this.suppressErrors = true,
     this.uniqueKillswitchWhitelistPrefsKey = whitelistPrefKey,
-    this.uniqueKillswitchWhitelistFailureConnectPrefsKey = whitelistFailedSourceConnectPrefKey,
+    this.uniqueKillswitchWhitelistFailureConnectPrefsKey =
+        whitelistFailedSourceConnectPrefKey,
     this.failuresToConnectToSourceBeforeWhitelist = 10,
     this.killStatusCode = 403,
     this.whitelistStatusCode = 202,
@@ -94,7 +96,9 @@ class _KillswitchState extends State<Killswitch> {
   /// check if the app has failed to connect to the source [widget.killAndWhitelistSourceUrl] more than [widget.failuresToConnectToSourceBeforeWhitelist] times
   Future<void> _checkSourceConnectFailures() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int failures = prefs.getInt(widget.uniqueKillswitchWhitelistFailureConnectPrefsKey) ?? 0;
+    final int failures =
+        prefs.getInt(widget.uniqueKillswitchWhitelistFailureConnectPrefsKey) ??
+            0;
     if (failures > widget.failuresToConnectToSourceBeforeWhitelist) {
       _whitelist();
     }
@@ -103,8 +107,11 @@ class _KillswitchState extends State<Killswitch> {
   /// increment the number of times the app has failed to connect to the source [widget.killAndWhitelistSourceUrl]
   Future<void> _incrementSourceConnectFailures() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int failures = prefs.getInt(widget.uniqueKillswitchWhitelistFailureConnectPrefsKey) ?? 0;
-    prefs.setInt(widget.uniqueKillswitchWhitelistFailureConnectPrefsKey, failures + 1);
+    final int failures =
+        prefs.getInt(widget.uniqueKillswitchWhitelistFailureConnectPrefsKey) ??
+            0;
+    prefs.setInt(
+        widget.uniqueKillswitchWhitelistFailureConnectPrefsKey, failures + 1);
     _checkSourceConnectFailures();
   }
 
