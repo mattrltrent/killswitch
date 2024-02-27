@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Adds analytics to package's README.md.
+
 ## 1.0.2
 
 - Fixes [pub.dev](https://pub.dev) warnings to improve package score.

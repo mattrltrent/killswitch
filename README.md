@@ -19,3 +19,5 @@ Killswitch(
 	child: ...
 );
 ```
+
+![analytics](https://hidden-coast-90561-45544df95b1b.herokuapp.com/api/v1/analytics/?kind=package-killswitch)
